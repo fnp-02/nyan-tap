@@ -55,7 +55,7 @@ export default function Home() {
       });
     });
 
-    io.on('tap', (x, y, player) => {
+    io.on('tap', (x, _y, player) => {
       if (player) {
         setPlayer(player);
       } else {
@@ -281,9 +281,10 @@ export default function Home() {
               />
             </Box>
             <TextField
-              name='name'
               variant='standard'
-              value={player.name}
+              name='name'
+              value={name}
+              onChange={({ target }) => setName(target.value)}
               style={{ alignSelf: 'stretch' }}
               inputProps={{
                 style: {
