@@ -15,7 +15,7 @@ export default function Row({ max, index, height, name, taps, trail }: Props) {
   return (
     <Stack style={{
       position: 'absolute',
-      backgroundColor: '#eee',
+      backgroundColor: '#ddd',
       width: '100%',
       height: height,
       top: height * index,

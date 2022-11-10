@@ -2314,6 +2314,11 @@ react-dom@latest:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-inline-script@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-inline-script/-/react-inline-script-1.2.0.tgz#b545455931406e6fd68ef59abd0daea24d18b5a3"
+  integrity sha512-Idfm2rYZ5KLr6Ti1IICkb8lIC7FMxDZoEJF93egGH+F1rAwWByAjPElcD0Tx2yBk39shYu8Pjo/CF09++yA27g==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"

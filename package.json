@@ -23,6 +23,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-inline-script": "^1.2.0",
     "react-sound": "^1.2.0",
     "react-sprite-animator": "^2.0.2",
     "react-tsparticles": "^2.5.3",

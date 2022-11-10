@@ -10,6 +10,10 @@ import Sound from 'react-sound';
 import { connect, Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 
+declare global {
+  var adsFooter: any[] | undefined;
+}
+
 const rowHeight = 80;
 
 export default function Home() {
@@ -27,6 +31,9 @@ export default function Home() {
   const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
+    try {
+      (window.adsFooter = window.adsFooter || []).push({});
+    } catch { }
     fetch('/api/socket').then(() => setInitialized(true));
   }, []);
 
@@ -106,9 +113,12 @@ export default function Home() {
         playStatus='PLAYING'
       />
       <Stack
-        square
-        component={Paper}
         direction='row'
+        component={Paper}
+        style={{
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+        }}
       >
         <Box
           width='calc(50% - .5px)'
@@ -303,8 +313,18 @@ export default function Home() {
           </Stack>
         </Collapse>
       </Stack>
-      <ins
-        data-adtest="on"
+      <Paper
+        square
+        component='ins'
+        className='adsFooter'
+        data-ad-client='ca-pub-9771140857713694'
+        data-ad-slot='2920243664'
+        data-ad-format='horizontal'
+        style={{
+          display: 'inline-block',
+          width: '400px',
+          height: '80px',
+        }}
       />
     </Stack>
   );
