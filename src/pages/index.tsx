@@ -14,6 +14,7 @@ import { v4 } from 'uuid';
 const rowHeight = 80;
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  console.log(req.headers);
   await fetch(`http://${req.headers.host}/api/socket`);
   return { props: {} };
 };
