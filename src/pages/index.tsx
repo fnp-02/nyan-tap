@@ -11,7 +11,7 @@ import Sound from 'react-sound';
 import { connect, Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 
-const host = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nyan-tap.vercel.app';
+const host = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nyan-tap.herokuapp.com';
 
 export const getStaticProps: GetStaticProps = async () => {
   await fetch(`${host}/api/socket`);
