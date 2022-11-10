@@ -14,7 +14,7 @@ import { v4 } from 'uuid';
 const rowHeight = 80;
 
 export const getStaticProps: GetStaticProps = async () => {
-  await fetch('https://fnp-02.github.io/nyan-tap/api/socket');
+  await fetch('https://nyan-tap.vercel.app/api/socket');
   return { props: {} };
 };
 
