@@ -11,12 +11,14 @@ import Sound from 'react-sound';
 import { connect, Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 
-const rowHeight = 80;
+const host = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nyan-tap.vercel.app';
 
 export const getStaticProps: GetStaticProps = async () => {
-  await fetch('https://nyan-tap.vercel.app/api/socket');
+  await fetch(`${host}/api/socket`);
   return { props: {} };
 };
+
+const rowHeight = 80;
 
 export default function Home() {
   const [socket, setSocket] = useState<Socket | null>(null);
