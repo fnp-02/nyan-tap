@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
+  exportPathMap() {
+    return {
+      '/': { page: '/' },
+      '/api/socket': { page: '/api/socket' },
+    }
+  },
   webpack(config, options) {
     const { isServer } = options;
     config.module.rules.push({
