@@ -1,7 +1,6 @@
 import { Country, createCountry } from '@/libs/country';
 import createFlag from '@/libs/createFlag';
 import Player from '@/libs/player';
-import axios from 'axios';
 import { readFileSync, writeFileSync } from 'fs';
 import { NextApiHandler } from 'next';
 import { Server } from 'socket.io';
@@ -74,9 +73,10 @@ const initSocket = (io: Server) => {
     if (!player) {
       let country = 'ID';
       if (process.env.NODE_ENV === 'production') {
-        const ip = socket.conn.remoteAddress;
-        const { data } = await axios(`https://ipapi.co/${ip}/json/`);
-        country = data.country_code;
+        console.log(socket.conn.remoteAddress);
+        // const ip = socket.conn.remoteAddress;
+        // const { data } = await axios(`https://ipapi.co/${ip}/json/`);
+        // country = data.country_code;
       }
       player = await createPlayer(country, uid);
       socket.broadcast.emit('player', player);
