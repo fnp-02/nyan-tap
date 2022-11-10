@@ -303,6 +303,9 @@ export default function Home() {
           </Stack>
         </Collapse>
       </Stack>
+      <ins
+        data-adtest="on"
+      />
     </Stack>
   );
 }
