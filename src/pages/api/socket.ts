@@ -1,7 +1,8 @@
 import { Country, createCountry } from '@/libs/country';
 import createFlag from '@/libs/createFlag';
 import Player from '@/libs/player';
-import { readFileSync, writeFileSync } from 'fs';
+import axios from 'axios';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { NextApiHandler } from 'next';
 import { Server } from 'socket.io';
 
@@ -11,7 +12,7 @@ const dataPath = `${process.cwd()}/public/data.json`;
 
 async function loadData() {
   const result: typeof countries = {};
-  for (const player of JSON.parse(readFileSync(dataPath).toString())) {
+  for (const player of (existsSync(dataPath) ? JSON.parse(readFileSync(dataPath).toString()) : [])) {
     if (!result[player.country_code]) {
       await createFlag(player.country_code);
       result[player.country_code] = await createCountry(player.country_code);
@@ -69,14 +70,16 @@ const initSocket = (io: Server) => {
       socket.disconnect();
     }
 
+    console.log(socket);
+
     let player = await findPlayer(uid);
     if (!player) {
       let country = 'ID';
       if (process.env.NODE_ENV === 'production') {
-        console.log(socket.conn.remoteAddress);
-        // const ip = socket.conn.remoteAddress;
-        // const { data } = await axios(`https://ipapi.co/${ip}/json/`);
-        // country = data.country_code;
+        const ip = socket.handshake.address;
+        console.log('new connection from', ip);
+        const { data } = await axios(`https://ipapi.co/${ip}/json/`);
+        country = data.country_code;
       }
       player = await createPlayer(country, uid);
       socket.broadcast.emit('player', player);
@@ -96,6 +99,9 @@ const handler: NextApiHandler = (_, res) => {
   const socket: any = res.socket;
   if (!socket.server.io) {
     socket.server.io = new Server(socket.server);
+    initSocket(socket.server.io);
+  } else if (process.env.NODE_ENV !== 'production') {
+    socket.server.io.removeAllListeners();
     initSocket(socket.server.io);
   }
   res.end();
