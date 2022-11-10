@@ -5,22 +5,15 @@ import Player from '@/libs/player';
 import theme from '@/styles/theme';
 import { KeyboardArrowUp, Save } from '@mui/icons-material';
 import { Avatar, Box, ButtonBase, Collapse, Divider, IconButton, Paper, Slide, Stack, TextField, Typography } from '@mui/material';
-import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import Sound from 'react-sound';
 import { connect, Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 
-const host = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nyan-tap.herokuapp.com';
-
-export const getStaticProps: GetStaticProps = async () => {
-  await fetch(`${host}/api/socket`);
-  return { props: {} };
-};
-
 const rowHeight = 80;
 
 export default function Home() {
+  const [initialized, setInitialized] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
 
   const [player, setPlayer] = useState<Player | null>(null);
@@ -34,48 +27,54 @@ export default function Home() {
   const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
-    let uid = localStorage.getItem('uid');
-    if (!uid) {
-      uid = v4();
-      localStorage.setItem('uid', uid);
-    }
-
-    const io = connect({
-      auth: { uid }
-    });
-
-    io.on('connected', (player, countries) => {
-      setPlayer(player);
-      setCountries(countries);
-    });
-
-    io.on('player', (player) => {
-      setCountries((countries) => {
-        const result = { ...countries };
-        result[player.country_code].players[player.uid] = player;
-        return result;
-      });
-    });
-
-    io.on('tap', (x, _y, player) => {
-      if (player) {
-        setPlayer(player);
-      } else {
-        player = x;
-      }
-      setCountries((countries) => {
-        const result = { ...countries };
-        result[player.country_code].players[player.uid] = player;
-        return result;
-      });
-    });
-
-    setSocket(io);
-
-    return (() => {
-      io.disconnect();
-    });
+    fetch('/api/socket').then(() => setInitialized(true));
   }, []);
+
+  useEffect(() => {
+    if (initialized) {
+      let uid = localStorage.getItem('uid');
+      if (!uid) {
+        uid = v4();
+        localStorage.setItem('uid', uid);
+      }
+
+      const io = connect({
+        auth: { uid }
+      });
+
+      io.on('connected', (player, countries) => {
+        setPlayer(player);
+        setCountries(countries);
+      });
+
+      io.on('player', (player) => {
+        setCountries((countries) => {
+          const result = { ...countries };
+          result[player.country_code].players[player.uid] = player;
+          return result;
+        });
+      });
+
+      io.on('tap', (x, _y, player) => {
+        if (player) {
+          setPlayer(player);
+        } else {
+          player = x;
+        }
+        setCountries((countries) => {
+          const result = { ...countries };
+          result[player.country_code].players[player.uid] = player;
+          return result;
+        });
+      });
+
+      setSocket(io);
+
+      return (() => {
+        io.disconnect();
+      });
+    }
+  }, [initialized]);
 
   if (!socket || !player) return 'Loading...';
 

@@ -70,14 +70,11 @@ const initSocket = (io: Server) => {
       socket.disconnect();
     }
 
-    console.log(socket);
-
     let player = await findPlayer(uid);
     if (!player) {
       let country = 'ID';
       if (process.env.NODE_ENV === 'production') {
-        const ip = socket.handshake.address;
-        console.log('new connection from', ip);
+        const ip = socket.handshake.headers['x-forwarded-for'];
         const { data } = await axios(`https://ipapi.co/${ip}/json/`);
         country = data.country_code;
       }
