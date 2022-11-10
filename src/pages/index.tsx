@@ -5,7 +5,7 @@ import Player from '@/libs/player';
 import theme from '@/styles/theme';
 import { KeyboardArrowUp, Save } from '@mui/icons-material';
 import { Avatar, Box, ButtonBase, Collapse, Divider, IconButton, Paper, Slide, Stack, TextField, Typography } from '@mui/material';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import Sound from 'react-sound';
 import { connect, Socket } from 'socket.io-client';
@@ -13,9 +13,8 @@ import { v4 } from 'uuid';
 
 const rowHeight = 80;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  console.log(req.headers);
-  await fetch(`http://${req.headers.host}/api/socket`);
+export const getStaticProps: GetStaticProps = async () => {
+  await fetch('https://fnp-02.github.io/nyan-tap/api/socket');
   return { props: {} };
 };
 
