@@ -11,7 +11,7 @@ import { connect, Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 
 declare global {
-  var adsFooter: any[] | undefined;
+  var adsbygoogle: any[] | undefined;
 }
 
 const rowHeight = 80;
@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      (window.adsFooter = window.adsFooter || []).push({});
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch { }
     fetch('/api/socket').then(() => setInitialized(true));
   }, []);
@@ -102,11 +102,11 @@ export default function Home() {
   }
 
   return (
-    <Stack
-      bgcolor='#ddd'
-      width='100vw'
-      height='100vh'
-    >
+    <Stack style={{
+      backgroundColor: '#ddd',
+      width: '100vw',
+      height: '100vh',
+    }}>
       <Sound
         loop
         url='/assets/sounds/bgm.mp3'
@@ -315,17 +315,31 @@ export default function Home() {
       </Stack>
       <Paper
         square
-        component='ins'
-        className='adsFooter'
-        data-ad-client='ca-pub-9771140857713694'
-        data-ad-slot='2920243664'
-        data-ad-format='horizontal'
-        style={{
-          display: 'inline-block',
-          width: '400px',
-          height: '80px',
+        sx={{
+          '& .adsbygoogle': {
+            display: 'block',
+            width: '320px',
+            height: '100px',
+
+            '& @media(min-width: 500px)': {
+              width: '468px',
+              height: '60px',
+            },
+
+            '& @media(min-width: 800px)': {
+              width: '728px',
+              height: '90px',
+            },
+          }
         }}
-      />
+      >
+        <ins
+          className='adsbygoogle'
+          data-ad-client='ca-pub-9771140857713694'
+          data-ad-slot='2920243664'
+          data-adtest={process.env.NODE_ENV !== 'production' ? 'on' : 'off'}
+        />
+      </Paper>
     </Stack>
   );
 }
